@@ -26,6 +26,10 @@ console.log(lines);
 
 */
 
+/*
+
+ASYNC I/O
+
 const fs = require("fs");
 fs.readFile(process.argv[2], (err, fileContents) => {
   if (err) {
@@ -33,4 +37,18 @@ fs.readFile(process.argv[2], (err, fileContents) => {
   }
   let lineSum = fileContents.toString().split("\n").length - 1;
   console.log(lineSum);
+});
+
+*/
+
+const fs = require("fs");
+fs.readdir(process.argv[2], (err, list) => {
+  if (err) {
+    return err;
+  }
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].split(".")[1] === process.argv[3]) {
+      console.log(list[i]);
+    }
+  }
 });
