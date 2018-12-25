@@ -3,6 +3,9 @@
 
 // require https module
 const https = require('https');
+// require http module for status codes
+const http = require('http');
+
 
 // Print error message
 
@@ -21,30 +24,33 @@ function getProfile(username) {
     try {
         // Connect to API URL (teamtreehouse.com/username.json)
         const request = https.get('https://teamtreehouse.com/' + username + '.json', (res) => {
-            console.log(res.statusCode);
-            // read data
-            let body = ""
-            res.on('data', (data) => {
-                body += data.toString();
-            });
-            res.on('end', () => {
-                try {
-                    // parse data
-                    const profile = JSON.parse(body);
-                    // print data
-                    printMessage(username, profile.badges.length, profile.points.JavaScript);   
-                } catch (error) {
-                    printError(error);
-                }
-
-
-            });
+            if(res.statusCode === 200) {
+                // read data
+                let body = ""
+                res.on('data', (data) => {
+                    body += data.toString();
+                });
+                res.on('end', () => {
+                    try {
+                        // parse data
+                        const profile = JSON.parse(body);
+                        // print data
+                        printMessage(username, profile.badges.length, profile.points.JavaScript);   
+                    } catch (error) {
+                        printError(error);
+                    }
+                });
+            } else {
+                const message = 'There was an error getting the profile for ' + 'username (' + http.STATUS_CODES[res.statusCode] + ').';
+                const statusCodeError = new Error(message);
+                console.error(statusCodeError);
+            }
         });
         request.on('error', (error) => {
-            printError(error);
+             printError(error);
         }); 
     } catch(error) {
-        printError(error);
+         printError(error);
     }
     
 }
