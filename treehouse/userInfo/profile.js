@@ -1,6 +1,3 @@
-// Problem: find user's badge count and javascript points in teamtreehouse.
-// Solution: use Node.js to connect to Treehouse's API to get profile and print out info.
-
 // require https module
 const https = require('https');
 // require http module for status codes
@@ -19,7 +16,7 @@ function printMessage(username, badgeCount, points) {
     console.log(message);
 }
 
-function getProfile(username) {
+function get(username) {
     // Error message
     try {
         // Connect to API URL (teamtreehouse.com/username.json)
@@ -55,5 +52,5 @@ function getProfile(username) {
     
 }
 
-const users = process.argv.slice(2);
-users.forEach(getProfile);
+// allow API access
+module.exports.get = get;
